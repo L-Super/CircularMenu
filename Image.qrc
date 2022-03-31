@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="0">resources/center.png</file>
+        <file alias="6">resources/down.png</file>
+        <file alias="4">resources/left.png</file>
+        <file alias="5">resources/left-down.png</file>
+        <file alias="3">resources/left-up.png</file>
+        <file alias="8">resources/right.png</file>
+        <file alias="7">resources/right-down.png</file>
+        <file alias="1">resources/right-up.png</file>
+        <file alias="2">resources/up.png</file>
+        <file>resources/leftup-one.png</file>
+        <file>resources/up-one.png</file>
+    </qresource>
+</RCC>
