@@ -1,23 +1,64 @@
 #include "CircularMenu.h"
-#include "ui_CircularMenu.h"
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPixmap>
-#include <QDebug>
+#include <QMatrix>
 #include <QtMath>
+#include <QDebug>
+
 
 #define qcout qDebug()<<"["<<__func__<<__LINE__<<"]"
 
-CircularMenu::CircularMenu(QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::CircularMenu)
+class CircularMenuPrivate{
+    Q_DECLARE_PUBLIC(CircularMenu)
+public:
+    CircularMenuPrivate(CircularMenu* q);
+    virtual ~CircularMenuPrivate() = default;
+
+private:
+    /**
+     * @brief DrawCircle 画圆
+     * @param painter
+     */
+    void DrawCircle(QPainter* painter);
+    /**
+     * @brief DrawPie 画弧形区域
+     * @param painter
+     */
+    void DrawPie(QPainter* painter);
+    /**
+     * @brief DrawImage 将图标画上去
+     * @param painter
+     */
+    void DrawImage(QPainter* painter);
+private:
+    CircularMenu* const q_ptr;
+
+    float smallCircleRadius;//小圆半径
+    float centerCircleRadius;//中心小圆半径
+//    float bigCircleRadius;//大圆半径 等于小圆加间隔
+    int circleSpacing;//大小圆之间的间隔
+    float iconScale;//图标缩放比例
+    bool mousePressed;//鼠标按下标志位
+    int areaIndex;//区域索引
+    QList<QPainterPath> arcPathList;//区域索引：0为center，1为right-up
+};
+
+CircularMenuPrivate::CircularMenuPrivate(CircularMenu *q)
+    :q_ptr(q)
     ,smallCircleRadius(200)
     ,centerCircleRadius(20)
     ,circleSpacing(10)
     ,iconScale(0.5)
     ,mousePressed(false)
 {
-    ui->setupUi(this);
+
+}
+
+CircularMenu::CircularMenu(QWidget *parent)
+    : QWidget(parent)
+    ,d_ptr(new CircularMenuPrivate(this))
+{
 //    for(int i = 0; i < 9; ++i){
 //        QString imagePath = QString(":/%1").arg(i);
 //        QPixmap dImg(imagePath);
@@ -29,22 +70,25 @@ CircularMenu::CircularMenu(QWidget *parent)
 
 CircularMenu::~CircularMenu()
 {
-    delete ui;
+
 }
 
 void CircularMenu::SetCircleRadius(const float radius)
 {
-    smallCircleRadius = radius;
+    Q_D(CircularMenu);
+    d->smallCircleRadius = radius;
 }
 
 void CircularMenu::SetCenterCircleRadius(const float radius)
 {
-    centerCircleRadius = radius;
+    Q_D(CircularMenu);
+    d->centerCircleRadius = radius;
 }
 
 void CircularMenu::SetCircleSpacing(const float spacing)
 {
-    circleSpacing = spacing;
+    Q_D(CircularMenu);
+    d->circleSpacing = spacing;
 }
 
 void CircularMenu::SetAllCircleRadius(float centerRadius, float circleRadius, float ringRadius)
@@ -56,12 +100,13 @@ void CircularMenu::SetAllCircleRadius(float centerRadius, float circleRadius, fl
 
 void CircularMenu::SetImageScale(const float scale)
 {
+    Q_D(CircularMenu);
     if(scale == 1 || scale == 0)
         return;
-    iconScale = scale;
+    d->iconScale = scale;
 }
 
-void CircularMenu::DrawCircle(QPainter *painter)
+void CircularMenuPrivate::DrawCircle(QPainter *painter)
 {
     // save() restore()一对。保存 ，恢复 QPainter 的状态，类似栈的入栈出栈
     painter->save();
@@ -77,12 +122,11 @@ void CircularMenu::DrawCircle(QPainter *painter)
     QPainterPath centerCirclePath;
     centerCirclePath.addEllipse(QPointF(0, 0), centerCircleRadius, centerCircleRadius);
     arcPathList.append(centerCirclePath);
-//    QBrush outCircleBrush((Qt::red));
-//    painter->fillPath(path, outCircleBrush);
+
     painter->restore();
 }
 
-void CircularMenu::DrawPie(QPainter *painter)
+void CircularMenuPrivate::DrawPie(QPainter *painter)
 {
     painter->save();
     painter->setPen(Qt::NoPen);
@@ -124,7 +168,7 @@ void CircularMenu::DrawPie(QPainter *painter)
     painter->restore();
 }
 
-void CircularMenu::DrawImage(QPainter *painter)
+void CircularMenuPrivate::DrawImage(QPainter *painter)
 {
     painter->save();
     auto scaleFactor = smallCircleRadius / 2 * iconScale;
@@ -193,7 +237,6 @@ void CircularMenu::ProcessButtonClicked(int BtnID)
         break;
     case 1:
         qcout<<QString("BtnID %1 clicked").arg(BtnID);
-
         break;
     case 2:
         qcout<<QString("BtnID %1 clicked").arg(BtnID);
@@ -220,9 +263,9 @@ void CircularMenu::ProcessButtonClicked(int BtnID)
     }
 }
 
-//TODO:按钮按下的效果
 void CircularMenu::paintEvent(QPaintEvent *event)
 {
+    Q_D(CircularMenu);
     Q_UNUSED(event)
     QPainter painter(this);
     painter.setRenderHints(QPainter::Antialiasing |
@@ -233,23 +276,24 @@ void CircularMenu::paintEvent(QPaintEvent *event)
 //    painter.rotate(22.5);
     //背景设为透明，可为其他颜色
     painter.setBrush(Qt::transparent);
-    DrawCircle(&painter);
-    DrawPie(&painter);
-    DrawImage(&painter);
+    d->DrawCircle(&painter);
+    d->DrawPie(&painter);
+    d->DrawImage(&painter);
 //    painter.translate(0,0);
 
     //鼠标按下后绘制按下效果
-    if(mousePressed)
+    if(d->mousePressed)
     {
         painter.save();
         painter.setBrush(Qt::transparent);
-        painter.drawPath(arcPathList[areaIndex]);
+        painter.drawPath(d->arcPathList[d->areaIndex]);
         painter.restore();
     }
 }
 
 void CircularMenu::mousePressEvent(QMouseEvent *event)
 {
+    Q_D(CircularMenu);
     QPoint mousePressPoint = event->pos();
 
     //因进行了原点的偏移，故坐标点也需要偏移
@@ -258,13 +302,13 @@ void CircularMenu::mousePressEvent(QMouseEvent *event)
 
     qcout<<"pos"<<mousePressPoint<<"trans pos"<<translatePoint;
 
-    for (int i = 0; i < arcPathList.count(); i++)
+    for (int i = 0; i < d->arcPathList.count(); i++)
     {
-        if (arcPathList[i].contains(translatePoint))
+        if (d->arcPathList[i].contains(translatePoint))
         {
             qcout<<"area i = "<<i;
-            mousePressed = true;
-            areaIndex = i;
+            d->mousePressed = true;
+            d->areaIndex = i;
             //更新绘制，实现鼠标按下效果
             update();
             emit BtnClicked(i);
@@ -275,10 +319,14 @@ void CircularMenu::mousePressEvent(QMouseEvent *event)
 
 void CircularMenu::mouseReleaseEvent(QMouseEvent *event)
 {
-    mousePressed = false;
+    Q_D(CircularMenu);
+    Q_UNUSED(event)
+    d->mousePressed = false;
     //更新绘制，实现鼠标松开效果
     update();
 }
+
+
 
 
 

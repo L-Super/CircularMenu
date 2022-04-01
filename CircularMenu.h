@@ -11,31 +11,27 @@
   */
 #include <QWidget>
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class CircularMenu; }
-QT_END_NAMESPACE
-
-//TODO:按钮悬浮时的变化
+class CircularMenuPrivate;
 class CircularMenu : public QWidget
 {
     Q_OBJECT
 
 public:
     CircularMenu(QWidget *parent = nullptr);
-    ~CircularMenu();
+    virtual ~CircularMenu();
     /**
      * @brief SetCirleRadius 设置圆的半径
-     * @param radius
+     * @param radius 半径
      */
     void SetCircleRadius(const float radius);
     /**
      * @brief SetCenterCircleRadius 设置中心按钮圆的半径
-     * @param radius
+     * @param radius 半径
      */
     void SetCenterCircleRadius(const float radius);
     /**
      * @brief SetCircleSpacing 设置圆与外圆环的间隔
-     * @param spacing
+     * @param spacing 间隔距离
      */
     void SetCircleSpacing(const float spacing);
     /**
@@ -44,7 +40,7 @@ public:
      * @param circleRadius 圆的半径
      * @param ringRadius 圆环的半径
      */
-    void SetAllCircleRadius(float centerRadius,float circleRadius,float ringRadius);
+    void SetAllCircleRadius(const float centerRadius, const float circleRadius, const float ringRadius);
     /**
      * @brief SetIconScale 设置图标的缩放比例，默认填满圆环
      * @param scale 范围 0 < sacle <= 1
@@ -52,25 +48,9 @@ public:
     void SetImageScale(const float scale = 1.0);
     /**
      * @brief ProcessButtonClicked 处理触发按钮按下事件
-     * @param BtnID
+     * @param BtnID 对应按钮序号
      */
     void ProcessButtonClicked(int BtnID);
-private:
-    /**
-     * @brief DrawCircle 画圆
-     * @param painter
-     */
-    void DrawCircle(QPainter* painter);
-    /**
-     * @brief DrawPie 画弧形区域
-     * @param painter
-     */
-    void DrawPie(QPainter* painter);
-    /**
-     * @brief DrawImage 将图标画上去
-     * @param painter
-     */
-    void DrawImage(QPainter* painter);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -81,14 +61,8 @@ signals:
     void BtnClicked(int id);
 
 private:
-    Ui::CircularMenu *ui;
-    float smallCircleRadius;//小圆半径
-    float centerCircleRadius;//中心小圆半径
-//    float bigCircleRadius;//大圆半径 等于小圆加间隔
-    int circleSpacing;//大小圆之间的间隔
-    float iconScale;//图标缩放比例
-    bool mousePressed;//鼠标按下标志位
-    int areaIndex;//区域索引
-    QList<QPainterPath> arcPathList;//区域索引：0为center，1为right-up
-    QVector<QPixmap> directionImg;
+    QScopedPointer<CircularMenuPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(CircularMenu)
+
+//    QVector<QPixmap> directionImg;
 };

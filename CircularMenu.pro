@@ -22,8 +22,7 @@ SOURCES += \
 HEADERS += \
     CircularMenu.h
 
-FORMS += \
-    CircularMenu.ui
+FORMS +=
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
