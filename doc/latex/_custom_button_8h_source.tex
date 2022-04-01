@@ -1,0 +1,98 @@
+\hypertarget{_custom_button_8h_source}{}\doxysection{Custom\+Button.\+h}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#include <QtWidgets/QWidget>}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <QPoint>}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include "{}qmath.h"{}}}
+\DoxyCodeLine{5 }
+\DoxyCodeLine{6 \textcolor{keyword}{enum} QUADRANT\_NUM \{}
+\DoxyCodeLine{7     QUADRANT\_UP,}
+\DoxyCodeLine{8     QUADRANT\_LEFT,}
+\DoxyCodeLine{9     QUADRANT\_DOWN,}
+\DoxyCodeLine{10     QUADRANT\_RIGHT,}
+\DoxyCodeLine{11     QUADRANT\_NO\_DEFINE,}
+\DoxyCodeLine{12 \};}
+\DoxyCodeLine{13 }
+\DoxyCodeLine{14 \textcolor{keyword}{class }\mbox{\hyperlink{class_custom_button}{CustomButton}} : \textcolor{keyword}{public} QWidget}
+\DoxyCodeLine{15 \{}
+\DoxyCodeLine{16     Q\_OBJECT}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{keyword}{public}:}
+\DoxyCodeLine{19     \mbox{\hyperlink{class_custom_button}{CustomButton}}(QWidget* parent = NULL);}
+\DoxyCodeLine{20     \textcolor{comment}{// 设置弧长及半径;}}
+\DoxyCodeLine{21     \textcolor{keywordtype}{void} setRadiusValue(\textcolor{keywordtype}{int} radius);}
+\DoxyCodeLine{22     \textcolor{keywordtype}{void} setArcLength(\textcolor{keywordtype}{int} arcLength);}
+\DoxyCodeLine{23     \textcolor{keywordtype}{void} drawRotatedText(QPainter *painter, \textcolor{keywordtype}{float} degrees, \textcolor{keywordtype}{int} x, \textcolor{keywordtype}{int} y, \textcolor{keyword}{const} QString \&text);}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{25     QPixmap getPixmap(\textcolor{keyword}{const} \textcolor{keywordtype}{int} ping);}
+\DoxyCodeLine{26     QColor getColor(\textcolor{keyword}{const} \textcolor{keywordtype}{int} ping);}
+\DoxyCodeLine{27     \textcolor{keywordtype}{int} getLineNum(\textcolor{keyword}{const} \textcolor{keywordtype}{int} ping);}
+\DoxyCodeLine{28     QPixmap getSignalPixmap(\textcolor{keyword}{const} QColor \&color,\textcolor{keyword}{const} \textcolor{keywordtype}{int} lineNum);\textcolor{comment}{//获取信号位图}}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{30     \textcolor{keywordtype}{void} setBeginDegree(\textcolor{keywordtype}{int} degree);}
+\DoxyCodeLine{31 }
+\DoxyCodeLine{32     \textcolor{comment}{//void enterEvent(QEvent *);}}
+\DoxyCodeLine{33 \textcolor{keyword}{private}:}
+\DoxyCodeLine{34      \textcolor{comment}{// 初始化按钮;}}
+\DoxyCodeLine{35     \textcolor{keywordtype}{void} initButton();}
+\DoxyCodeLine{36     \textcolor{comment}{// 绘制按钮; }}
+\DoxyCodeLine{37     \textcolor{keywordtype}{void} paintEvent(QPaintEvent *);}
+\DoxyCodeLine{38     \textcolor{comment}{// 添加圆弧;}}
+\DoxyCodeLine{39     \textcolor{keywordtype}{void} addArc(\textcolor{keywordtype}{int} x, \textcolor{keywordtype}{int} y, \textcolor{keywordtype}{int} startAngle, \textcolor{keywordtype}{int} angleLength, QRgb color);}
+\DoxyCodeLine{40 \textcolor{comment}{//    void addArc(qreal startAngle, qreal angleLength, QRgb color);}}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{42     \textcolor{comment}{// 鼠标事件;}}
+\DoxyCodeLine{43     \textcolor{keywordtype}{void} mouseMoveEvent(QMouseEvent *event);}
+\DoxyCodeLine{44     \textcolor{keywordtype}{void} mousePressEvent(QMouseEvent *event);}
+\DoxyCodeLine{45     \textcolor{keywordtype}{void} mouseReleaseEvent(QMouseEvent *event);}
+\DoxyCodeLine{46 }
+\DoxyCodeLine{47     \textcolor{comment}{// 鼠标离开事件;}}
+\DoxyCodeLine{48 \textcolor{comment}{//    void leaveEvent(QEvent *event);}}
+\DoxyCodeLine{49     \textcolor{keywordtype}{int} analysisAngle(\textcolor{keywordtype}{int} x,\textcolor{keywordtype}{int} y);}
+\DoxyCodeLine{50 }
+\DoxyCodeLine{51 signals:}
+\DoxyCodeLine{52     \textcolor{comment}{// 鼠标点击;}}
+\DoxyCodeLine{53     \textcolor{keywordtype}{void} signalButtonClicked(\textcolor{keywordtype}{int} buttonId);}
+\DoxyCodeLine{54     \textcolor{comment}{// 鼠标松开;}}
+\DoxyCodeLine{55     \textcolor{keywordtype}{void} signalButtonReleased(\textcolor{keywordtype}{int} buttonId);}
+\DoxyCodeLine{56 \textcolor{keyword}{private}:}
+\DoxyCodeLine{57     \textcolor{comment}{// 弧长及半径;}}
+\DoxyCodeLine{58     \textcolor{keywordtype}{int} m\_radius, m\_arcLength;}
+\DoxyCodeLine{59 }
+\DoxyCodeLine{60     \textcolor{comment}{// 圆弧路径;}}
+\DoxyCodeLine{61     QList<QPainterPath> m\_arcPathList;}
+\DoxyCodeLine{62     QList<QPainterPath> m\_textPathList;}
+\DoxyCodeLine{63     \textcolor{comment}{// 圆弧颜色;}}
+\DoxyCodeLine{64     QList<QBrush> m\_colorList;}
+\DoxyCodeLine{65     \textcolor{comment}{// 当前鼠标按钮/进入 按钮的索引;}}
+\DoxyCodeLine{66     \textcolor{keywordtype}{int} m\_pressIndex, m\_enterIndex;}
+\DoxyCodeLine{67     \textcolor{comment}{// 鼠标事件标志位;}}
+\DoxyCodeLine{68     \textcolor{keywordtype}{bool} m\_isMousePressed;}
+\DoxyCodeLine{69     \textcolor{keywordtype}{bool} m\_isMouseEntered;}
+\DoxyCodeLine{70 }
+\DoxyCodeLine{71     QUADRANT\_NUM mCurWorkRegion;}
+\DoxyCodeLine{72 }
+\DoxyCodeLine{73     QPoint mCenterRound;}
+\DoxyCodeLine{74     QPixmap mDegreePixmap;}
+\DoxyCodeLine{75 }
+\DoxyCodeLine{76     QString mStrUp;}
+\DoxyCodeLine{77     QString mStrLeft;}
+\DoxyCodeLine{78     QString mStrDown;}
+\DoxyCodeLine{79     QString mStrRight;}
+\DoxyCodeLine{80 }
+\DoxyCodeLine{81     \textcolor{keywordtype}{bool} m\_bTextModeEn;}
+\DoxyCodeLine{82 }
+\DoxyCodeLine{83 \};}
+\DoxyCodeLine{84 }
+\DoxyCodeLine{85 }
+\DoxyCodeLine{86 }
+\DoxyCodeLine{87 }
+\DoxyCodeLine{88 }
+\DoxyCodeLine{89 }
+\DoxyCodeLine{90 }
+\DoxyCodeLine{91 }
+\DoxyCodeLine{92 }
+\DoxyCodeLine{93 }
+
+\end{DoxyCode}

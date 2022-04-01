@@ -1,0 +1,147 @@
+\hypertarget{class_circular_menu}{}\doxysection{Circular\+Menu类 参考}
+\label{class_circular_menu}\index{CircularMenu@{CircularMenu}}
+类 Circular\+Menu 继承关系图\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_circular_menu}
+\end{center}
+\end{figure}
+\doxysubsection*{信号}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_circular_menu_a4c993144320d3871e531eb27a55b7fb4}\label{class_circular_menu_a4c993144320d3871e531eb27a55b7fb4}} 
+void {\bfseries Btn\+Clicked} (int id)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public 成员函数}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_circular_menu_a3ccdbd727edb590214c632656f98801a}\label{class_circular_menu_a3ccdbd727edb590214c632656f98801a}} 
+{\bfseries Circular\+Menu} (QWidget $\ast$parent=nullptr)
+\item 
+void \mbox{\hyperlink{class_circular_menu_a5ff5b4e88137e8a0863c33f5edfe17d8}{Set\+Circle\+Radius}} (const float radius)
+\item 
+void \mbox{\hyperlink{class_circular_menu_a912366b501327948bd6019c997d703c8}{Set\+Center\+Circle\+Radius}} (const float radius)
+\item 
+void \mbox{\hyperlink{class_circular_menu_a36b9ed0305b80648e67c134823866abd}{Set\+Circle\+Spacing}} (const float spacing)
+\item 
+void \mbox{\hyperlink{class_circular_menu_a5c54dbc3ed8f181e2bbb18bfc94381c5}{Set\+All\+Circle\+Radius}} (const float center\+Radius, const float circle\+Radius, const float ring\+Radius)
+\item 
+void \mbox{\hyperlink{class_circular_menu_a785f039207853c83c7dabda8206095f5}{Set\+Image\+Scale}} (const float scale=1.\+0)
+\item 
+void \mbox{\hyperlink{class_circular_menu_abe63ef4726a6483d74657896d800c8b1}{Process\+Button\+Clicked}} (int Btn\+ID)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected 成员函数}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_circular_menu_a3bf5f3b2fbd40f57b7ede198c1d1796b}\label{class_circular_menu_a3bf5f3b2fbd40f57b7ede198c1d1796b}} 
+void {\bfseries paint\+Event} (QPaint\+Event $\ast$event) override
+\item 
+\mbox{\Hypertarget{class_circular_menu_a12686c1a97a6a56907c6ccfb21007b93}\label{class_circular_menu_a12686c1a97a6a56907c6ccfb21007b93}} 
+void {\bfseries mouse\+Press\+Event} (QMouse\+Event $\ast$event) override
+\item 
+\mbox{\Hypertarget{class_circular_menu_aac196a52bc5e5ab5f2b0c4571eb9d132}\label{class_circular_menu_aac196a52bc5e5ab5f2b0c4571eb9d132}} 
+void {\bfseries mouse\+Release\+Event} (QMouse\+Event $\ast$event) override
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{成员函数说明}
+\mbox{\Hypertarget{class_circular_menu_abe63ef4726a6483d74657896d800c8b1}\label{class_circular_menu_abe63ef4726a6483d74657896d800c8b1}} 
+\index{CircularMenu@{CircularMenu}!ProcessButtonClicked@{ProcessButtonClicked}}
+\index{ProcessButtonClicked@{ProcessButtonClicked}!CircularMenu@{CircularMenu}}
+\doxysubsubsection{\texorpdfstring{ProcessButtonClicked()}{ProcessButtonClicked()}}
+{\footnotesize\ttfamily void Circular\+Menu\+::\+Process\+Button\+Clicked (\begin{DoxyParamCaption}\item[{int}]{Btn\+ID }\end{DoxyParamCaption})}
+
+
+
+Process\+Button\+Clicked 处理触发按钮按下事件 
+
+
+\begin{DoxyParams}{参数}
+{\em Btn\+ID} & 对应按钮序号 \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_circular_menu_a5c54dbc3ed8f181e2bbb18bfc94381c5}\label{class_circular_menu_a5c54dbc3ed8f181e2bbb18bfc94381c5}} 
+\index{CircularMenu@{CircularMenu}!SetAllCircleRadius@{SetAllCircleRadius}}
+\index{SetAllCircleRadius@{SetAllCircleRadius}!CircularMenu@{CircularMenu}}
+\doxysubsubsection{\texorpdfstring{SetAllCircleRadius()}{SetAllCircleRadius()}}
+{\footnotesize\ttfamily void Circular\+Menu\+::\+Set\+All\+Circle\+Radius (\begin{DoxyParamCaption}\item[{const float}]{center\+Radius,  }\item[{const float}]{circle\+Radius,  }\item[{const float}]{ring\+Radius }\end{DoxyParamCaption})}
+
+
+
+Set\+Circle\+Radius 设置圆的半径参数 
+
+
+\begin{DoxyParams}{参数}
+{\em center\+Radius} & 中心圆按钮的半径 \\
+\hline
+{\em circle\+Radius} & 圆的半径 \\
+\hline
+{\em ring\+Radius} & 圆环的半径 \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_circular_menu_a912366b501327948bd6019c997d703c8}\label{class_circular_menu_a912366b501327948bd6019c997d703c8}} 
+\index{CircularMenu@{CircularMenu}!SetCenterCircleRadius@{SetCenterCircleRadius}}
+\index{SetCenterCircleRadius@{SetCenterCircleRadius}!CircularMenu@{CircularMenu}}
+\doxysubsubsection{\texorpdfstring{SetCenterCircleRadius()}{SetCenterCircleRadius()}}
+{\footnotesize\ttfamily void Circular\+Menu\+::\+Set\+Center\+Circle\+Radius (\begin{DoxyParamCaption}\item[{const float}]{radius }\end{DoxyParamCaption})}
+
+
+
+Set\+Center\+Circle\+Radius 设置中心按钮圆的半径 
+
+
+\begin{DoxyParams}{参数}
+{\em radius} & 半径 \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_circular_menu_a5ff5b4e88137e8a0863c33f5edfe17d8}\label{class_circular_menu_a5ff5b4e88137e8a0863c33f5edfe17d8}} 
+\index{CircularMenu@{CircularMenu}!SetCircleRadius@{SetCircleRadius}}
+\index{SetCircleRadius@{SetCircleRadius}!CircularMenu@{CircularMenu}}
+\doxysubsubsection{\texorpdfstring{SetCircleRadius()}{SetCircleRadius()}}
+{\footnotesize\ttfamily void Circular\+Menu\+::\+Set\+Circle\+Radius (\begin{DoxyParamCaption}\item[{const float}]{radius }\end{DoxyParamCaption})}
+
+
+
+Set\+Cirle\+Radius 设置圆的半径 
+
+
+\begin{DoxyParams}{参数}
+{\em radius} & 半径 \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_circular_menu_a36b9ed0305b80648e67c134823866abd}\label{class_circular_menu_a36b9ed0305b80648e67c134823866abd}} 
+\index{CircularMenu@{CircularMenu}!SetCircleSpacing@{SetCircleSpacing}}
+\index{SetCircleSpacing@{SetCircleSpacing}!CircularMenu@{CircularMenu}}
+\doxysubsubsection{\texorpdfstring{SetCircleSpacing()}{SetCircleSpacing()}}
+{\footnotesize\ttfamily void Circular\+Menu\+::\+Set\+Circle\+Spacing (\begin{DoxyParamCaption}\item[{const float}]{spacing }\end{DoxyParamCaption})}
+
+
+
+Set\+Circle\+Spacing 设置圆与外圆环的间隔 
+
+
+\begin{DoxyParams}{参数}
+{\em spacing} & 间隔距离 \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_circular_menu_a785f039207853c83c7dabda8206095f5}\label{class_circular_menu_a785f039207853c83c7dabda8206095f5}} 
+\index{CircularMenu@{CircularMenu}!SetImageScale@{SetImageScale}}
+\index{SetImageScale@{SetImageScale}!CircularMenu@{CircularMenu}}
+\doxysubsubsection{\texorpdfstring{SetImageScale()}{SetImageScale()}}
+{\footnotesize\ttfamily void Circular\+Menu\+::\+Set\+Image\+Scale (\begin{DoxyParamCaption}\item[{const float}]{scale = {\ttfamily 1.0} }\end{DoxyParamCaption})}
+
+
+
+Set\+Icon\+Scale 设置图标的缩放比例，默认填满圆环 
+
+
+\begin{DoxyParams}{参数}
+{\em scale} & 范围 0 \texorpdfstring{$<$}{<} sacle \texorpdfstring{$<$}{<}= 1 \\
+\hline
+\end{DoxyParams}
+
+
+该类的文档由以下文件生成\+:\begin{DoxyCompactItemize}
+\item 
+Circular\+Menu.\+h\item 
+Circular\+Menu.\+cpp\end{DoxyCompactItemize}
