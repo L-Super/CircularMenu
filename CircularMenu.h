@@ -49,7 +49,7 @@ public:
      * @brief SetIconScale 设置图标的缩放比例，默认填满圆环
      * @param scale 范围 0 < sacle <= 1
      */
-    void SetIconScale(const float scale = 1.0);
+    void SetImageScale(const float scale = 1.0);
     /**
      * @brief ProcessButtonClicked 处理触发按钮按下事件
      * @param BtnID
@@ -72,11 +72,8 @@ private:
      */
     void DrawImage(QPainter* painter);
 
-    void MousePressed();
-
 protected:
     void paintEvent(QPaintEvent *event) override;
-//    void mouseMoveEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
 
@@ -90,7 +87,8 @@ private:
 //    float bigCircleRadius;//大圆半径 等于小圆加间隔
     int circleSpacing;//大小圆之间的间隔
     float iconScale;//图标缩放比例
-    bool mousePressed;
-    QList<QPainterPath> arcPathList;
+    bool mousePressed;//鼠标按下标志位
+    int areaIndex;//区域索引
+    QList<QPainterPath> arcPathList;//区域索引：0为center，1为right-up
     QVector<QPixmap> directionImg;
 };

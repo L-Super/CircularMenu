@@ -6,9 +6,8 @@
 #include <QDebug>
 #include <QtMath>
 
- #define qcout qDebug()<<"["<<__func__<<__LINE__<<"]"
+#define qcout qDebug()<<"["<<__func__<<__LINE__<<"]"
 
-//暂时赋初值
 CircularMenu::CircularMenu(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::CircularMenu)
@@ -19,15 +18,12 @@ CircularMenu::CircularMenu(QWidget *parent)
     ,mousePressed(false)
 {
     ui->setupUi(this);
-    for(int i = 0; i < 9; ++i){
-        QString imagePath = QString(":/%1").arg(i);
-        QPixmap dImg(imagePath);
-        directionImg.push_back(dImg);
-    }
+//    for(int i = 0; i < 9; ++i){
+//        QString imagePath = QString(":/%1").arg(i);
+//        QPixmap dImg(imagePath);
+//        directionImg.push_back(dImg);
+//    }
 
-
-//    CustomButton* c = new CustomButton(this);
-//    c->resize(200,200);
     connect(this,&CircularMenu::BtnClicked,this,&CircularMenu::ProcessButtonClicked);
 }
 
@@ -58,7 +54,7 @@ void CircularMenu::SetAllCircleRadius(float centerRadius, float circleRadius, fl
     SetCircleSpacing(circleRadius + ringRadius);
 }
 
-void CircularMenu::SetIconScale(const float scale)
+void CircularMenu::SetImageScale(const float scale)
 {
     if(scale == 1 || scale == 0)
         return;
@@ -67,7 +63,7 @@ void CircularMenu::SetIconScale(const float scale)
 
 void CircularMenu::DrawCircle(QPainter *painter)
 {
-    // save() restore()一对。保存 ，恢复 QPainter 的状态，类似基于栈的撤销
+    // save() restore()一对。保存 ，恢复 QPainter 的状态，类似栈的入栈出栈
     painter->save();
     QPainterPath path;
     painter->setPen(QPen(Qt::SolidLine));
@@ -77,7 +73,7 @@ void CircularMenu::DrawCircle(QPainter *painter)
     //绘制圆。
     painter->drawEllipse(QPointF(0, 0), bigCircleRadius, bigCircleRadius);
     painter->drawEllipse(QPointF(0, 0), smallCircleRadius, smallCircleRadius);
-//    painter->drawEllipse(QPointF(0, 0), centerCircleRadius, centerCircleRadius);
+
     QPainterPath centerCirclePath;
     centerCirclePath.addEllipse(QPointF(0, 0), centerCircleRadius, centerCircleRadius);
     arcPathList.append(centerCirclePath);
@@ -118,7 +114,6 @@ void CircularMenu::DrawPie(QPainter *painter)
         angle += 45;
 //        painter->setPen(QColor("#3d84a8"));
         QPainterPath subPath;
-        //TODO：圆弧高度暂定为固定数值
         subPath.addEllipse(rectangle.adjusted(circleHeight, circleHeight, -circleHeight, -circleHeight));
         // path为扇形 subPath为椭圆 减去可得圆弧
         path -= subPath;
@@ -139,7 +134,7 @@ void CircularMenu::DrawImage(QPainter *painter)
 //    painter->drawPoint(QPoint(-smallRadius / sqrt(2), -smallRadius / sqrt(2)));
 //    painter->drawLine(QPoint(0,0),QPoint(x, y));
 
-//    //方案一：分别计算对应坐标点
+//    //方案一：分别计算对应坐标点,计算矩形图片在扇形中等分弧的坐标
 //    //up 点(x,y) ...
 //    float x = smallRadius/sqrt(5+5*tan(67.5*M_PI/180));
 //    float y = sqrt(smallRadius*smallRadius - smallRadius*smallRadius/(5+5*tan(67.5*M_PI/180)));
@@ -164,35 +159,29 @@ void CircularMenu::DrawImage(QPainter *painter)
 //        i += 45;
 //    }
 
-    //方案三：通过指定图片进行绘制
-    QPixmap pix(":/resources/up-one.png");
+    //方案三：通过指定图片自身旋转后再进行绘制
+    QPixmap pUpImg(":/resources/up-one.png");
     QMatrix matrix;
-    matrix.translate(pix.width()/2.0,pix.height()/2);
+    matrix.translate(pUpImg.width()/2.0,pUpImg.height()/2);
     matrix.rotate(-45);
-    matrix.translate(-pix.width()/2.0, -pix.height()/2);
-    pix = pix.transformed(matrix,Qt::SmoothTransformation);
+    matrix.translate(-pUpImg.width()/2.0, -pUpImg.height()/2);
+    pUpImg = pUpImg.transformed(matrix,Qt::SmoothTransformation);
     for (int i = 0; i < 360;)
     {
         //旋转坐标轴
         painter->rotate(i);
         painter->drawPixmap(QRect(point, QSize(scaleFactor, scaleFactor)),
-                            pix.scaled(QSize(scaleFactor,scaleFactor), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                            pUpImg.scaled(QSize(scaleFactor,scaleFactor), Qt::KeepAspectRatio, Qt::SmoothTransformation));
         i += 45;
     }
     // 中心按钮图标
+    QPixmap pCenterImg(":/0");
     painter->drawPixmap(QRect(QPoint(-scaleFactor/2,-scaleFactor/2), QSize(scaleFactor, scaleFactor)),
-                        directionImg.at(0).scaled(QSize(scaleFactor,scaleFactor), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                        pCenterImg.scaled(QSize(scaleFactor,scaleFactor), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     painter->restore();
 }
 
-void CircularMenu::MousePressed()
-{
-    QPainter painter(this);
-    painter.setBrush(Qt::gray);
-    painter.drawPath(arcPathList[1]);
-    update();
-}
 
 //TODO:add corresponding func()
 void CircularMenu::ProcessButtonClicked(int BtnID)
@@ -231,6 +220,7 @@ void CircularMenu::ProcessButtonClicked(int BtnID)
     }
 }
 
+//TODO:按钮按下的效果
 void CircularMenu::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event)
@@ -241,19 +231,21 @@ void CircularMenu::paintEvent(QPaintEvent *event)
     QPointF center(width() / 2.0, height() / 2.0);
     painter.translate(center);
 //    painter.rotate(22.5);
-    painter.setBrush(Qt::white);
+    //背景设为透明，可为其他颜色
+    painter.setBrush(Qt::transparent);
     DrawCircle(&painter);
     DrawPie(&painter);
     DrawImage(&painter);
 //    painter.translate(0,0);
 
-
+    //鼠标按下后绘制按下效果
     if(mousePressed)
     {
-        painter.setBrush(Qt::gray);
-        painter.drawPath(arcPathList[1]);
+        painter.save();
+        painter.setBrush(Qt::transparent);
+        painter.drawPath(arcPathList[areaIndex]);
+        painter.restore();
     }
-
 }
 
 void CircularMenu::mousePressEvent(QMouseEvent *event)
@@ -263,7 +255,7 @@ void CircularMenu::mousePressEvent(QMouseEvent *event)
     //因进行了原点的偏移，故坐标点也需要偏移
     //x>>1 位运算，等效x/2
     QPoint translatePoint = mousePressPoint - QPoint(width() >> 1, height() >> 1);
-    qcout<<"width"<<width()<<">>1"<<(width()>>1);
+
     qcout<<"pos"<<mousePressPoint<<"trans pos"<<translatePoint;
 
     for (int i = 0; i < arcPathList.count(); i++)
@@ -272,7 +264,8 @@ void CircularMenu::mousePressEvent(QMouseEvent *event)
         {
             qcout<<"area i = "<<i;
             mousePressed = true;
-
+            areaIndex = i;
+            //更新绘制，实现鼠标按下效果
             update();
             emit BtnClicked(i);
             break;
@@ -280,10 +273,10 @@ void CircularMenu::mousePressEvent(QMouseEvent *event)
     }
 }
 
-//TODO:调用update(）重新绘制，以覆盖按钮按下时的颜色填充操作
 void CircularMenu::mouseReleaseEvent(QMouseEvent *event)
 {
     mousePressed = false;
+    //更新绘制，实现鼠标松开效果
     update();
 }
 
