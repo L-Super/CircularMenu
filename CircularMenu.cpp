@@ -37,7 +37,7 @@ private:
     float smallCircleRadius;//小圆半径
     float centerCircleRadius;//中心小圆半径
 //    float bigCircleRadius;//大圆半径 等于小圆加间隔
-    int circleSpacing;//大小圆之间的间隔
+    float circleSpacing;//大小圆之间的间隔
     float iconScale;//图标缩放比例
     bool mousePressed;//鼠标按下标志位
     int areaIndex;//区域索引
@@ -112,15 +112,15 @@ void CircularMenuPrivate::DrawCircle(QPainter *painter)
     painter->save();
     QPainterPath path;
     painter->setPen(QPen(Qt::SolidLine));
-//    painter->setBrush(QBrush(Qt::red));
 
     auto bigCircleRadius = smallCircleRadius + circleSpacing;
-    //绘制圆。
+    //绘制圆环的两个圆
     painter->drawEllipse(QPointF(0, 0), bigCircleRadius, bigCircleRadius);
     painter->drawEllipse(QPointF(0, 0), smallCircleRadius, smallCircleRadius);
 
+    //中心按钮圆
     QPainterPath centerCirclePath;
-    centerCirclePath.addEllipse(QPointF(0, 0), centerCircleRadius, centerCircleRadius);
+    centerCirclePath.addEllipse(QPointF(0, 0), centerCircleRadius*1.382, centerCircleRadius*1.382);
     arcPathList.append(centerCirclePath);
 
     painter->restore();
@@ -151,14 +151,18 @@ void CircularMenuPrivate::DrawPie(QPainter *painter)
     //    painter->drawPie(rectangle, startAngle, spanAngle);
 
     float angle = 22.5;
-    auto circleHeight = smallCircleRadius - centerCircleRadius;
+    auto circleHeight = smallCircleRadius - centerCircleRadius*1.382;
     for (int i = 0; i < 8; i++) {
         QPainterPath path;
         path.arcTo(rectangle, angle, 45);
         angle += 45;
 //        painter->setPen(QColor("#3d84a8"));
         QPainterPath subPath;
+        //QRect.adjusted(int xp1, int yp1, int xp2, int yp2)
+        //xp1为相对于原始矩形左上角x坐标的偏移值，yp1为相对于原始矩形左上角y坐标的偏移值，负值表示在矩形外，正值表示在矩形内；
+        //xp2和yp2分别是相对于右下角x坐标和y坐标的偏移值，负值表示在矩形内，正值表示在矩形外
         subPath.addEllipse(rectangle.adjusted(circleHeight, circleHeight, -circleHeight, -circleHeight));
+
         // path为扇形 subPath为椭圆 减去可得圆弧
         path -= subPath;
         arcPathList.append(path);
@@ -206,9 +210,9 @@ void CircularMenuPrivate::DrawImage(QPainter *painter)
     //方案三：通过指定图片自身旋转后再进行绘制
     QPixmap pUpImg(":/resources/up-one.png");
     QMatrix matrix;
-    matrix.translate(pUpImg.width()/2.0,pUpImg.height()/2);
+    matrix.translate(pUpImg.width()/2.0, pUpImg.height()/2.0);
     matrix.rotate(-45);
-    matrix.translate(-pUpImg.width()/2.0, -pUpImg.height()/2);
+    matrix.translate(-pUpImg.width()/2.0, -pUpImg.height()/2.0);
     pUpImg = pUpImg.transformed(matrix,Qt::SmoothTransformation);
     for (int i = 0; i < 360;)
     {
@@ -259,7 +263,6 @@ void CircularMenu::ProcessButtonClicked(int BtnID)
     case 8:
         qcout<<QString("BtnID %1 clicked").arg(BtnID);
         break;
-
     }
 }
 
@@ -267,6 +270,7 @@ void CircularMenu::paintEvent(QPaintEvent *event)
 {
     Q_D(CircularMenu);
     Q_UNUSED(event)
+    qcout<<"enter paintEvent";
     QPainter painter(this);
     painter.setRenderHints(QPainter::Antialiasing |
                            QPainter::TextAntialiasing |
@@ -285,6 +289,7 @@ void CircularMenu::paintEvent(QPaintEvent *event)
     if(d->mousePressed)
     {
         painter.save();
+        painter.setPen(Qt::gray);
         painter.setBrush(Qt::transparent);
         painter.drawPath(d->arcPathList[d->areaIndex]);
         painter.restore();
@@ -324,6 +329,22 @@ void CircularMenu::mouseReleaseEvent(QMouseEvent *event)
     d->mousePressed = false;
     //更新绘制，实现鼠标松开效果
     update();
+}
+
+void CircularMenu::resizeEvent(QResizeEvent *event)
+{
+    Q_D(CircularMenu);
+    Q_UNUSED(event)
+    qcout<<"enter resizeEvent";
+    d->arcPathList.clear();
+    auto width = size().width();
+    auto height = size().height();
+
+    auto diameter = width > height ? height : width;
+    auto radius = diameter / 2;
+    d->smallCircleRadius = 0.816 * radius;
+    d->circleSpacing = 0.1 * radius;
+    d->centerCircleRadius = 0.15 * radius;
 }
 
 
