@@ -1,10 +1,10 @@
-圆形/环形菜单或者叫云台仪表盘。拥有八个方向键和中心重置键。
+圆形菜单 / 环形菜单，或者叫云台仪表盘。拥有八个方向键和中心重置键。
 
 
 
 效果如图：
 
-![image-20220331215739417](C:\Users\Listening\AppData\Roaming\Typora\typora-user-images\image-20220331215739417.png)
+![img](https://gitee.com/listening2020/md_pic/raw/master/img-workpc/image-20220331215739417.png)
 
 ## 原理
 
