@@ -47,6 +47,16 @@ public:
      */
     void SetImageScale(const float scale = 1.0);
     /**
+     * @brief SetBackgroundColor 设置圆环背景颜色
+     * @param bg
+     */
+    void SetBackgroundColor(const QColor& bg);
+    /**
+     * @brief SetBtnPressColor 设置圆环按下颜色
+     * @param c
+     */
+    void SetBtnPressColor(const QColor& c);
+    /**
      * @brief ProcessButtonClicked 处理触发按钮按下事件
      * @param BtnID 对应按钮序号
      */
