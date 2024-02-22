@@ -1,8 +1,9 @@
 #include "CircularMenu.h"
+#include <QPainterPath>
 #include <QMouseEvent>
+#include <QTransform>
 #include <QPainter>
 #include <QPixmap>
-#include <QMatrix>
 #include <QtMath>
 #include <QDebug>
 
@@ -37,7 +38,6 @@ private:
 
     float smallCircleRadius;         //小圆半径
     float centerCircleRadius;        //中心小圆半径
-                                     //    float bigCircleRadius;//大圆半径 等于小圆加间隔
     float circleSpacing;             //大小圆之间的间隔
     float iconScale;                 //图标缩放比例
     bool mousePressed;               //鼠标按下标志位
@@ -217,11 +217,11 @@ void CircularMenuPrivate::DrawImage(QPainter *painter)
 
     //方案三：通过指定图片自身旋转后再进行绘制
     QPixmap pUpImg(":/resources/up-one.png");
-    QMatrix matrix;
-    matrix.translate(pUpImg.width() / 2.0, pUpImg.height() / 2.0);
-    matrix.rotate(-45);
-    matrix.translate(-pUpImg.width() / 2.0, -pUpImg.height() / 2.0);
-    pUpImg = pUpImg.transformed(matrix, Qt::SmoothTransformation);
+    QTransform trans;
+    trans.translate(pUpImg.width() / 2.0, pUpImg.height() / 2.0);
+    trans.rotate(-45);
+    trans.translate(-pUpImg.width() / 2.0, -pUpImg.height() / 2.0);
+    pUpImg = pUpImg.transformed(trans, Qt::SmoothTransformation);
     for (int i = 0; i < 360;)
     {
         //旋转坐标轴
