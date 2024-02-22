@@ -2,7 +2,8 @@
 
 效果如图：
 
-![img](https://gitee.com/listening2020/md_pic/raw/master/img-workpc/image-20220331215739417.png)
+![image](https://github.com/L-Super/CircularMenu/assets/40905056/99b69c81-6870-4df6-a7ed-b3af4f7342de)
+
 
 ## 原理
 
